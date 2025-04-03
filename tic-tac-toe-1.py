@@ -13,17 +13,16 @@ board_place = { 1:board[0][0], 2:board[0][1], 3:board[0][2],
 
 print("Welcome to Tic Tac Toe")
 def main():
+    while True:
 
-    choice = input("Play with Computer(c) or another Player(p)[q to quit]").lower()
+        choice = input("Play with Computer(c) or another Player(p)[q to quit]").lower()
 
-    if choice == "c":
-        play_with_computer()
-    elif choice == "p":
-        play_with_player()
-    elif choice == "q":
-        quit()
-    else:
-        main()
+        if choice == "c":
+            play_with_computer()
+        elif choice == "p":
+            play_with_player()
+        elif choice == "q":
+            quit()
 
 def play_with_player():
 
@@ -67,40 +66,49 @@ def get_player_move():
             player_mv = int(player_mv)
         except:
             print("Please enter a valid number")
-            get_player_move()
+            continue
         if player_mv >= 1 and player_mv <= 9:
             if str(board_place[player_mv][0]).isdigit():
                 return player_mv
             
         print("Please enter a valid number")
-        get_player_move()
+        
 
 def get_computer_move(cmp,player):
-    board_copy = copy.deepcopy(board)
-    board_place_copy = { 1:board_copy[0][0], 2:board_copy[0][1], 3:board_copy[0][2],
-                        4:board_copy[1][0], 5:board_copy[1][1], 6:board_copy[1][2],
-                        7:board_copy[2][0], 8:board_copy[2][1], 9:board_copy[2][2]}
+    
+
 
     avilable_moves = []
     for move in range(1,10):
+
+        board_copy = copy.deepcopy(board)
+        board_place_copy = { 1:board_copy[0][0], 2:board_copy[0][1], 3:board_copy[0][2],
+                            4:board_copy[1][0], 5:board_copy[1][1], 6:board_copy[1][2],
+                            7:board_copy[2][0], 8:board_copy[2][1], 9:board_copy[2][2]}
+        
+
         if str(board_place_copy[move][0]).isdigit():
             avilable_moves.append(move)
             place_in_board(board_place_copy,move,cmp)
             if check_for_win(board_copy,for_comp=True):
                 print("winnig move")
                 return move
+            
+
+
+    for move in range(1,10):
+
         board_copy = copy.deepcopy(board)
         board_place_copy = { 1:board_copy[0][0], 2:board_copy[0][1], 3:board_copy[0][2],
                             4:board_copy[1][0], 5:board_copy[1][1], 6:board_copy[1][2],
                             7:board_copy[2][0], 8:board_copy[2][1], 9:board_copy[2][2]}
 
-    for move in range(1,10):
         if str(board_place_copy[move][0]).isdigit():
             place_in_board(board_place_copy,move,player)
             if check_for_win(board_copy,for_comp=True):
                 print("defending move")
                 return move
-        board_copy = copy.deepcopy(board)
+            board_copy = copy.deepcopy(board)
         board_place_copy = { 1:board_copy[0][0], 2:board_copy[0][1], 3:board_copy[0][2],
                             4:board_copy[1][0], 5:board_copy[1][1], 6:board_copy[1][2],
                             7:board_copy[2][0], 8:board_copy[2][1], 9:board_copy[2][2]}
@@ -115,8 +123,9 @@ def check_for_win(board_to_check,obj="",for_comp = False):
                 return True
             print_board(board_to_check)
             print(f"{obj} won")
-
             reset()
+            return None
+        
         if board_to_check[i][0][0] == board_to_check[i][1][0] == board_to_check[i][2][0]:
             if for_comp:
                 return  True
@@ -124,6 +133,7 @@ def check_for_win(board_to_check,obj="",for_comp = False):
             print_board(board_to_check)
             print(f"{obj} won")
             reset()
+            return None
             
 
     if board_to_check[0][0][0] == board_to_check[1][1][0] == board_to_check[2][2][0] or board_to_check[0][2][0] == board_to_check[1][1][0] == board_to_check[2][0][0]:
@@ -132,6 +142,7 @@ def check_for_win(board_to_check,obj="",for_comp = False):
         print_board(board_to_check)
         print(f"{obj} won")
         reset()
+        return None
 
     for i in range(0,3):
         for j in range(0,3):
@@ -141,6 +152,7 @@ def check_for_win(board_to_check,obj="",for_comp = False):
     print_board(board_to_check)
     print("It's a draw")
     reset()
+    return None
 
 def reset():
     global board,board_place
